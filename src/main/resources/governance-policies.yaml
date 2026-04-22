@@ -1,0 +1,39 @@
+# Quarkus LangChain4j Governance Policy Configuration
+# Each policy rule is evaluated in order; first match wins.
+
+policies:
+  # File system policies
+  - name: deny-file-delete
+    tool: filesystem.delete
+    action: DENY
+    condition: caller.role == "developer"
+
+  - name: allow-file-read
+    tool: filesystem.read
+    action: ALLOW
+
+  - name: allow-file-write
+    tool: filesystem.write
+    action: ALLOW
+    condition: caller.role == "admin"
+
+  # Database policies
+  - name: deny-raw-sql-execute
+    tool: database.execute
+    action: DENY
+    condition: args.sql.toUpperCase().contains("DROP")
+
+  - name: allow-database-read
+    tool: database.query
+    action: ALLOW
+
+  # Network policies
+  - name: deny-external-webhook
+    tool: http.post
+    condition: args.url.contains("external")
+    action: DENY
+
+  # Default: allow all other tools
+  - name: default-allow
+    tool: ".*"
+    action: ALLOW
