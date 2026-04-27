@@ -27,4 +27,3 @@ jobs:
 
       - name: Run tests
         run: ./mvnw test -q
-        working-directory: /tmp/quarkus-governance
