@@ -1,6 +1,7 @@
 package io.quarkus.langchain4j.governance;
 
-import io.quarkus.arc.runtime.BeanContainer;
+import io.quarkus.arc.Arc;
+import io.quarkus.arc.BeanManager;
 import io.quarkus.runtime.annotations.Recorder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
@@ -23,8 +24,9 @@ public class GovernanceExtension {
         PolicyStore policyStore = new PolicyStore(policyFile);
         AuditLogger auditLogger = new AuditLogger();
 
-        container.beanManager().createInstance()
-                .getReference(GovernanceExtension.class);
+        // Use Arc.container() for modern Quarkus versions where BeanContainer.beanManager() is removed
+        BeanManager bm = Arc.container().getBeanManager();
+        bm.createInstance().getReference(GovernanceExtension.class);
     }
 
     public boolean isEnabled() {
