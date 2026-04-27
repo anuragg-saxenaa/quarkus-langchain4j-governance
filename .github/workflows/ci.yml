@@ -26,4 +26,4 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
 
       - name: Run tests
-        run: ./mvnw test -q
+        run: mvn test -q
